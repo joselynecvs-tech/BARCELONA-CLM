@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BSC CONTRACTS - CLM Barcelona Sporting Club</title>
+  <!-- Google Font: Montserrat (Acorde a la tipografía oficial del club) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
+  <!-- CSS Personalizado BSC CLM -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/logo-bsc.png">
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- ======================================================================
+         SIDEBAR: Navegación de Módulos (7 Categorías Oficiales)
+         ====================================================================== -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="assets/logo-bsc.png" alt="Escudo Barcelona Sporting Club" class="bsc-crest">
+        <div class="brand-text">
+          <h1>BSC <span>CONTRACTS</span></h1>
+          <p>CLM • Legal Institucional</p>
+        </div>
+      </div>
+
+      <div class="sidebar-section-title">Módulos de Contratación</div>
+      <nav class="sidebar-nav" id="sidebarNavList">
+        <!-- Renderizado dinámicamente con app.renderSidebar() -->
+      </nav>
+
+      <div class="sidebar-section-title" style="margin-top: 10px;">Herramientas Legales</div>
+      <div class="sidebar-nav">
+        <div class="nav-item" onclick="app.openClassifierModal()">
+          <div class="nav-item-content">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span>Clasificador IA</span>
+          </div>
+          <span class="nav-badge" style="background: rgba(255,209,0,0.2); color: var(--bsc-yellow-primary);">Auto</span>
+        </div>
+
+        <div class="nav-item" onclick="app.openReferenceModal()">
+          <div class="nav-item-content">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span>Manual de Marca</span>
+          </div>
+        </div>
+
+        <div class="nav-item" onclick="app.exportToCSV()">
+          <div class="nav-item-content">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Exportar Reporte</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user-badge">
+          <div class="user-avatar">BSC</div>
+          <div class="user-info">
+            <h4>Abg. Carlos Mendoza</h4>
+            <p>Director Jurídico BSC</p>
+          </div>
+        </div>
+        <div style="text-align: center; font-size: 0.65rem; color: var(--text-subtle);">
+          Barcelona Sporting Club © 1925 - 2026<br>
+          Guayaquil, Ecuador
+        </div>
+      </div>
+    </aside>
+
+    <!-- ======================================================================
+         MAIN CONTENT: Centro de Mando Jurídico
+         ====================================================================== -->
+    <main class="main-content">
+      <!-- Barra Superior -->
+      <header class="top-header">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="globalSearchInput" class="search-input" placeholder="Buscar por contraparte, jugador, cláusula o ID...">
+          <span class="search-shortcut">Ctrl+K</span>
+        </div>
+
+        <div style="font-size: 0.8rem; color: var(--bsc-yellow-primary); font-weight: 600;" id="currentDateDisplay">
+          <!-- Fecha cargada por JS -->
+        </div>
+
+        <div class="header-actions">
+          <button class="btn btn-outline-gold btn-sm" id="openReferenceBtn" title="Ver modelo oficial de tipografía y colores">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            Modelo Oficial
+          </button>
+
+          <button class="btn btn-primary" id="openClassifierBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            + Subir / Clasificar Contrato
+          </button>
+        </div>
+      </header>
+
+      <!-- Contenedor Principal de la Página -->
+      <div class="page-container">
+        <!-- Hero Banner Dinámico Oficial -->
+        <div class="hero-banner">
+          <div class="hero-content">
+            <div class="hero-title-group">
+              <span class="hero-badge" id="heroBadge">7 Módulos CLM</span>
+              <h2 id="heroTitle">Repositorio General de Contratos <span>BSC</span></h2>
+              <p class="hero-subtitle" id="heroSubtitle">
+                Gestión integral del ciclo de vida contractual de Barcelona Sporting Club: clasificación inteligente, seguimiento de vigencias, aprobaciones de directorio y administración de pasivos y derechos deportivos.
+              </p>
+            </div>
+            <div class="hero-stats">
+              <div class="hero-stat-card">
+                <div class="hero-stat-val" id="heroContractsCount">19</div>
+                <div class="hero-stat-lbl">Contratos Registrados</div>
+              </div>
+              <div class="hero-stat-card">
+                <div class="hero-stat-val" id="heroContractsVal">$24.8M USD</div>
+                <div class="hero-stat-lbl">Valor en Gestión</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Métricas del Portafolio Jurídico (Inspirado en Ironclad) -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-card-header">
+              <span class="metric-label">Contratos Totales</span>
+              <div class="metric-icon-wrap" style="color: var(--bsc-yellow-primary);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="metric-value" id="metricTotalContracts">0</div>
+            <div class="metric-subtext">
+              <span class="metric-trend-up">● 100% Organizados</span> en 7 módulos
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-card-header">
+              <span class="metric-label">Portafolio en Gestión</span>
+              <div class="metric-icon-wrap" style="color: #34D399;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="1" x2="12" y2="23"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="metric-value" id="metricTotalValue">$0M</div>
+            <div class="metric-subtext">
+              <span>Ingresos por auspicios y pasivos</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-card-header">
+              <span class="metric-label">Próximos a Vencer</span>
+              <div class="metric-icon-wrap" style="color: #F59E0B;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="metric-value" id="metricExpiringContracts" style="color: #FBBF24;">0</div>
+            <div class="metric-subtext">
+              <span class="metric-trend-alert">Alerta de renovación</span> o renegociación
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-card-header">
+              <span class="metric-label">En Revisión / Aprobación</span>
+              <div class="metric-icon-wrap" style="color: #A855F7;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="metric-value" id="metricPendingApprovals" style="color: #C084FC;">0</div>
+            <div class="metric-subtext">
+              <span>Pendientes de Directorio / Legal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Selector Rápido de Módulos (Chips Horizontales) -->
+        <div class="module-tabs-strip" id="moduleTabsStrip">
+          <!-- Renderizado dinámicamente con app.renderModuleChips() -->
+        </div>
+
+        <!-- Barra de Controles y Filtros -->
+        <div class="controls-bar">
+          <div class="controls-left">
+            <div class="status-filter-pills">
+              <span class="filter-pill active" data-status="all">Todos</span>
+              <span class="filter-pill" data-status="active">Vigentes</span>
+              <span class="filter-pill" data-status="in_review">En Revisión</span>
+              <span class="filter-pill" data-status="approval">Aprobación</span>
+              <span class="filter-pill" data-status="signature">En Firma</span>
+              <span class="filter-pill" data-status="expiring">Por Vencer</span>
+              <span class="filter-pill" data-status="draft">Borradores</span>
+            </div>
+          </div>
+
+          <div class="controls-right">
+            <button class="btn btn-secondary btn-sm" id="exportCsvBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Descargar CSV
+            </button>
+            <button class="btn btn-secondary btn-sm" id="resetDataBtn" title="Restaurar base de datos oficial de muestra">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              Restaurar Datos
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabla de Contratos Estilo Ironclad CLM Grid -->
+        <div class="table-container">
+          <table class="contracts-table">
+            <thead>
+              <tr>
+                <th style="width: 28%;">Contrato / Referencia</th>
+                <th style="width: 14%;">Módulo CLM</th>
+                <th style="width: 18%;">Contraparte</th>
+                <th style="width: 12%;">Cuantía (USD)</th>
+                <th style="width: 12%;">Plazo / Vigencia</th>
+                <th style="width: 10%;">Estado & Riesgo</th>
+                <th style="width: 6%;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="contractsTableBody">
+              <!-- Renderizado dinámicamente con app.renderContractsTable() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ======================================================================
+       MODAL: CLASIFICADOR INTELIGENTE DE CONTRATOS (Core Feature)
+       ====================================================================== -->
+  <div class="modal-overlay" id="classifierModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div style="background: rgba(255, 209, 0, 0.15); padding: 8px; border-radius: 8px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--bsc-yellow-primary)" stroke-width="2.5">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <div>
+            <h3>Clasificador Inteligente de Contratos BSC</h3>
+            <p>Sube o pega cualquier documento legal: el sistema detectará automáticamente a cuál de los 7 módulos pertenece.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="closeClassifierBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Selector Rápido de Pruebas Reales de Barcelona SC -->
+        <div class="quick-samples-bar">
+          <h5>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            Probar Clasificación con Modelos Reales de Barcelona SC (1-Clic):
+          </h5>
+          <div class="sample-buttons-row">
+            <button class="btn-sample" onclick="app.testSampleCategory('jugadores')">⚽ 1. Jugador (Fichaje)</button>
+            <button class="btn-sample" onclick="app.testSampleCategory('auspicios')">🤝 2. Auspicio (Camiseta)</button>
+            <button class="btn-sample" onclick="app.testSampleCategory('administradores')">👔 3. Gerente / DT</button>
+            <button class="btn-sample" onclick="app.testSampleCategory('creditos')">🏦 4. Crédito Bancario</button>
+            <button class="btn-sample" onclick="app.testSampleCategory('licencias')">🏷️ 5. Licencia de Marca</button>
+            <button class="btn-sample" onclick="app.testSampleCategory('acuerdos_pago')">⚖️ 6. Acuerdo de Pago</button>
+            <button class="btn-sample" onclick="app.testSampleCategory('proveedores')">🚛 7. Proveedor (Catering)</button>
+          </div>
+        </div>
+
+        <!-- Zona de Arrastrar y Soltar Archivo -->
+        <div class="dropzone" id="fileDropzone">
+          <input type="file" id="contractFileInput" style="display: none;" accept=".txt,.pdf,.docx,.doc">
+          <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <h4>Arrastra aquí el archivo del contrato o haz clic para seleccionarlo</h4>
+          <p>Formatos soportados: PDF, DOCX, TXT. El motor procesará los considerandos, partes y cláusulas.</p>
+        </div>
+
+        <!-- Área de Texto para Pegar Texto de Contrato -->
+        <div class="text-paste-toggle">
+          <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+            O pega el texto / cláusulas del contrato:
+          </label>
+          <button class="btn btn-outline-gold btn-sm" id="analyzeTextBtn">
+            Analizar Texto
+          </button>
+        </div>
+        <textarea id="contractPasteArea" class="contract-textarea" placeholder="Pega aquí el contenido contractual (ej. 'CONTRATO DE PATROCINIO ENTRE CERVECERÍA Y BARCELONA SPORTING CLUB...')"></textarea>
+
+        <!-- Animación de Escaneo Radar -->
+        <div class="scanning-card" id="scanningCard">
+          <div class="radar-spinner"></div>
+          <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">
+            Analizando Documento con Motor Legal BSC...
+          </h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">
+            Escaneando términos clave, considerandos, contrapartes, obligaciones y jurisprudencia FEF / FIFA.
+          </p>
+        </div>
+
+        <!-- Tarjeta de Resultado de Clasificación -->
+        <div class="classification-result-card" id="classificationResultCard">
+          <div class="result-header">
+            <div class="match-info">
+              <span style="font-size: 0.7rem; font-weight: 700; color: var(--bsc-yellow-primary); text-transform: uppercase; letter-spacing: 1px;">
+                Módulo Determinado por el Sistema:
+              </span>
+              <h4 id="detectedModuleName">1. Jugadores</h4>
+            </div>
+            <div class="confidence-meter">
+              <div class="confidence-bar">
+                <div class="confidence-fill" id="detectedConfidenceFill" style="width: 95%;"></div>
+              </div>
+              <span class="confidence-text" id="detectedConfidenceText">95% Certeza</span>
+            </div>
+          </div>
+
+          <div class="rationale-text" id="detectedRationale">
+            Identificado como Auspicios debido a términos determinantes de patrocinio, camiseta oficial y exclusividad en Estadio Banco Pichincha.
+          </div>
+
+          <h5 style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">
+            Metadatos Extraídos y Asignación (Puedes modificar antes de guardar):
+          </h5>
+
+          <div class="meta-grid">
+            <div class="form-group">
+              <label>Módulo Asignado</label>
+              <select id="editClassifiedModule" class="form-control">
+                <option value="jugadores">1. Jugadores</option>
+                <option value="auspicios">2. Auspicios</option>
+                <option value="administradores">3. Administradores</option>
+                <option value="creditos">4. Créditos</option>
+                <option value="licencias">5. Licencias</option>
+                <option value="acuerdos_pago">6. Acuerdos de Pago</option>
+                <option value="proveedores">7. Proveedores</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Título del Contrato</label>
+              <input type="text" id="editClassifiedTitle" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label>Contraparte (Jugador / Empresa / Banco)</label>
+              <input type="text" id="editClassifiedParty" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label>Cuantía Estimada (USD $)</label>
+              <input type="number" id="editClassifiedValue" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label>Fecha de Inicio</label>
+              <input type="date" id="editClassifiedStart" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label>Fecha de Vencimiento</label>
+              <input type="date" id="editClassifiedEnd" class="form-control">
+            </div>
+
+            <div class="form-group" style="grid-column: span 2;">
+              <label>Nivel de Riesgo Legal Inicial</label>
+              <select id="editClassifiedRisk" class="form-control">
+                <option value="low">Riesgo Bajo (Términos habituales sin contingencia)</option>
+                <option value="medium">Riesgo Medio (Cláusulas de exclusividad o montos elevados)</option>
+                <option value="high">Riesgo Alto / Crítico (Posible sanción FIFA, moratoria o rescisión)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="app.closeClassifierModal()">Cancelar</button>
+        <button class="btn btn-primary" id="saveClassifiedContractBtn" style="display: none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          Confirmar y Guardar en Módulo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       DRAWER INSPECTOR DE CONTRATOS (Estilo Ironclad Redlining)
+       ====================================================================== -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer-panel" id="contractDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title-group">
+        <span class="contract-code" id="drawerContractCode">BSC-JUG-2026-001</span>
+        <h3 id="drawerContractTitle">Contrato de Trabajo Deportivo Profesional</h3>
+      </div>
+      <button class="modal-close-btn" id="closeDrawerBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <!-- Ciclo de Vida Contractual Stepper -->
+      <div class="drawer-section-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        Flujo de Ciclo de Vida (CLM Workflow)
+      </div>
+      <div class="lifecycle-stepper" id="lifecycleStepper">
+        <!-- Renderizado dinámicamente con app.renderLifecycleStepper() -->
+      </div>
+
+      <!-- Cuadro de Metadatos Principales -->
+      <div id="drawerMetaBox"></div>
+
+      <!-- Cláusulas Principales del Contrato -->
+      <div class="drawer-section-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+        </svg>
+        Cláusulas Destacadas e Inspección Legal
+      </div>
+      <div id="drawerClausesBox"></div>
+
+      <!-- Trazabilidad y Registro de Auditoría (Audit Trail) -->
+      <div class="drawer-section-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+        Historial de Acciones y Auditoría
+      </div>
+      <div id="drawerAuditBox"></div>
+    </div>
+
+    <div class="drawer-footer">
+      <button class="btn btn-secondary btn-sm" onclick="app.printContractSummary()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 6 2 18 2 18 9"></polyline>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+          <rect x="6" y="14" width="12" height="8"></rect>
+        </svg>
+        Imprimir Ficha Oficial
+      </button>
+
+      <button class="btn btn-primary btn-sm" onclick="app.advanceStage(app.selectedContract.id)">
+        Avanzar Etapa Siguiente ➔
+      </button>
+    </div>
+  </aside>
+
+  <!-- ======================================================================
+       MODAL: REFERENCIA DE MARCA Y COMUNICADO OFICIAL
+       ====================================================================== -->
+  <div class="modal-overlay" id="referenceModal">
+    <div class="modal-card" style="max-width: 720px;">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <img src="assets/logo-bsc.png" style="width: 28px; height: 28px; object-fit: contain;">
+          <div>
+            <h3>Guía de Identidad Institucional Barcelona SC</h3>
+            <p>Alineación estricta con la tipografía, jerarquía y paleta de colores oficial del club.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="closeReferenceBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
+          El sistema <strong>BSC CONTRACTS</strong> utiliza exactamente los parámetros visuales institucionales tomados del comunicado oficial de Barcelona Sporting Club:
+        </p>
+        <div style="display: flex; justify-content: center; gap: 14px; margin-bottom: 18px;">
+          <div style="background: #08080A; border: 1px solid var(--border-subtle); padding: 8px 16px; border-radius: 8px;">
+            <div style="font-size: 0.7rem; color: var(--text-muted);">Obsidian Black</div>
+            <strong style="color: #FFFFFF;">#08080A</strong>
+          </div>
+          <div style="background: #FFD100; color: #000; padding: 8px 16px; border-radius: 8px; font-weight: 700;">
+            <div style="font-size: 0.7rem; color: #000;">BSC Gold / Yellow</div>
+            #FFD100
+          </div>
+          <div style="background: #D91A2A; color: #FFF; padding: 8px 16px; border-radius: 8px; font-weight: 700;">
+            <div style="font-size: 0.7rem; color: #FFF;">BSC Red</div>
+            #D91A2A
+          </div>
+          <div style="background: #0A3580; color: #FFF; padding: 8px 16px; border-radius: 8px; font-weight: 700;">
+            <div style="font-size: 0.7rem; color: #FFF;">BSC Blue</div>
+            #0A3580
+          </div>
+        </div>
+        <img src="assets/comunicado-referencia.png" alt="Modelo Comunicado Oficial Barcelona SC" class="comunicado-preview-img">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="app.closeReferenceModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor de Notificaciones Toast -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts de la Aplicación -->
+  <script src="js/sample-data.js"></script>
+  <script src="js/classifier.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
